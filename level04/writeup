@@ -1,0 +1,10 @@
+/var/lib/babel/output.conf
+/var/lib/babel/templates
+/var/lib/babel/templates/template.m4
+/var/lib/babel/output.conf.bak
+/var/lib/babel/output.conf.sha256
+/etc/systemd/system/timers.target.wants/babel.timer
+/etc/systemd/system/babel.service
+/etc/systemd/system/babel.timer
+/etc/alternatives/pybabel
+/opt/snowcrash/level04/babel.sh
