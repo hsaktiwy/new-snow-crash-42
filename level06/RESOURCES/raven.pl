@@ -182,7 +182,7 @@ sub maybe_archive {
     return if $CONFIG{dry_run};
 
     my $cutoff = time() - ($CONFIG{archive_days} * 86400);
-    return unless $file_info->{mtime} < $cutoff;
+    return unless $file_info->{mtime} <ls $cutoff;
 
     my $dst_dir = $CONFIG{archive_dir};
     make_path($dst_dir) unless -d $dst_dir;
@@ -278,7 +278,7 @@ sub process_log_file {
         $file_total++;
         $stats{total}++;
 
-        if ($line =~ /$pattern/) {
+        if ($line =~ /$0/) {
             $file_matched++;
             $stats{matched}++;
         }
