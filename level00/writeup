@@ -1,0 +1,248 @@
+```sh
+level00@snowcrash:~$ find / -user flag00 2>/dev/null
+/home/flag00
+/opt/snowcrash/level00/hiro
+level00@snowcrash:~$ ls -la /opt/snowcrash/level00/hiro
+-r-sr-x--- 1 flag00 level00 27112 Jun  9 19:03 /opt/snowcrash/level00/hiro
+level00@snowcrash:~$ strings /opt/snowcrash/level00/hiro
+/lib64/ld-linux-x86-64.so.2
+eNa%
+mfUa
+fgets
+snprintf
+stdin
+strncpy
+__stack_chk_fail
+exit
+fflush
+difftime
+fopen
+getpwuid
+getgrnam
+usleep
+getpid
+stdout
+strftime
+atoi
+strcspn
+__libc_start_main
+stderr
+ctermid
+fprintf
+__cxa_finalize
+localtime
+getgid
+fclose
+memset
+fputc
+fputs
+__isoc99_sscanf
+getuid
+getegid
+fwrite
+strcmp
+strncmp
+geteuid
+libc.so.6
+GLIBC_2.7
+GLIBC_2.4
+GLIBC_2.34
+GLIBC_2.2.5
+_ITM_deregisterTMCloneTable
+__gmon_start__
+_ITM_registerTMCloneTable
+PTE1
+u+UH
+APQWVASAQA
+%Y-%m-%dT%H:%M:%S
+%s seq=%u uid=%d euid=%d gid=%d user=%s term=%s retries=%d event=%s
+flag00
+/var/log/snowcrash/hiro.log
+%63[^=]=%127s
+version
+max_retries
+session_timeout
+rate_limit
+audit_enabled
+log_path
+/dev/pts/
+/dev/tty
+METRICS sessions=%llu denials=%llu timeouts=%llu commands=%llu avg_secs=%.2f
+flag00@snowcrash:~$ 
+[*] Checking credentials...
+[*] Access granted 
+ welcome, flag00
+Session timeout.
+uid=3000(flag00) gid=3000(flag00) groups=3000(flag00)
+whoami
+flag00
+hostname
+SnowCrash
+uname -a
+uname
+Linux SnowCrash 3.2.0-4-amd64 #1 SMP Debian 3.2.51-1 x86_64 GNU/Linux
+/home/flag00
+SHELL=/bin/bash
+HOME=/home/flag00
+USER=flag00
+LOGNAME=flag00
+PATH=/usr/local/bin:/usr/bin:/bin
+TERM=xterm-256color
+total 12
+drwxr-x--- 2 flag00 flag00 4096 Jan  1 00:00 .
+drwxr-xr-x 22 root   root   4096 Jan  1 00:00 ..
+-r-------- 1 flag00 flag00   32 Jan  1 00:00 .flag
+-rwsr-x--- 1 flag00 level00  12288 Jan  1 00:00 hiro
+cat: permission denied
+sudo
+sudo: sorry, you must have a tty to run sudo
+su: Authentication failure
+exit
+quit
+logout
+help
+GNU bash, version 4.2.37(1)-release (x86_64-pc-linux-gnu)
+Type 'help' to see this list.
+%s: command not found
+/etc/snowcrash/hiro.conf
+error: policy version mismatch
+denied_uid_range
+error: uid not permitted
+denied_username_invalid
+error: invalid username
+denied_rate_limit
+error: rate limit exceeded
+denied_group
+error: group membership check failed
+session_start
+session_end
+>@f2av5il02puano7naaf6adaf3a
+9*3$"
+GCC: (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+Scrt1.o
+__abi_tag
+crtstuff.c
+deregister_tm_clones
+__do_global_dtors_aux
+completed.0
+__do_global_dtors_aux_fini_array_entry
+frame_dummy
+__frame_dummy_init_array_entry
+hiro.c
+flag_data
+g_shutdown_flag
+g_audit_seq
+g_audit_fd
+g_retry_count
+g_session_pid
+g_policy_level
+g_rate_table
+g_cred_cache
+handle_sigterm
+open_audit
+write_audit_record
+audit_event
+close_audit
+load_default_policy
+parse_policy_file
+uid_hash
+cache_credentials
+lookup_cached_creds
+rate_check
+check_policy_version
+check_session_timeout
+check_terminal
+verify_group_membership
+g_metrics
+metrics_record_session
+metrics_record_denial
+metrics_record_command
+metrics_emit
+init_context
+fatal
+run_restricted_shell
+validate_uid_range
+validate_username_chars
+__FRAME_END__
+_DYNAMIC
+__GNU_EH_FRAME_HDR
+_GLOBAL_OFFSET_TABLE_
+localtime@GLIBC_2.2.5
+__libc_start_main@GLIBC_2.34
+strncpy@GLIBC_2.2.5
+strncmp@GLIBC_2.2.5
+_ITM_deregisterTMCloneTable
+stdout@GLIBC_2.2.5
+stdin@GLIBC_2.2.5
+getpid@GLIBC_2.2.5
+_edata
+fclose@GLIBC_2.2.5
+getpwuid@GLIBC_2.2.5
+_fini
+__stack_chk_fail@GLIBC_2.4
+getuid@GLIBC_2.2.5
+difftime@GLIBC_2.2.5
+snprintf@GLIBC_2.2.5
+fputs@GLIBC_2.2.5
+memset@GLIBC_2.2.5
+geteuid@GLIBC_2.2.5
+fputc@GLIBC_2.2.5
+strcspn@GLIBC_2.2.5
+fgets@GLIBC_2.2.5
+__data_start
+strcmp@GLIBC_2.2.5
+fprintf@GLIBC_2.2.5
+__gmon_start__
+__dso_handle
+getgrnam@GLIBC_2.2.5
+_IO_stdin_used
+getgid@GLIBC_2.2.5
+fflush@GLIBC_2.2.5
+__isoc99_sscanf@GLIBC_2.7
+_end
+getegid@GLIBC_2.2.5
+__bss_start
+main
+strftime@GLIBC_2.2.5
+ctermid@GLIBC_2.2.5
+fopen@GLIBC_2.2.5
+atoi@GLIBC_2.2.5
+exit@GLIBC_2.2.5
+fwrite@GLIBC_2.2.5
+__TMC_END__
+_ITM_registerTMCloneTable
+__cxa_finalize@GLIBC_2.2.5
+_init
+usleep@GLIBC_2.2.5
+stderr@GLIBC_2.2.5
+.symtab
+.strtab
+.shstrtab
+.interp
+.note.gnu.property
+.note.gnu.build-id
+.note.ABI-tag
+.gnu.hash
+.dynsym
+.dynstr
+.gnu.version
+.gnu.version_r
+.rela.dyn
+.rela.plt
+.init
+.plt.got
+.plt.sec
+.text
+.fini
+.rodata
+.flag_data
+.eh_frame_hdr
+.eh_frame
+.init_array
+.fini_array
+.dynamic
+.data
+.bss
+.comment
+```
+after some testing you can notice that the 'hiro' is a executable and try to execute, it will display a fack shell, if you strings the executable after that horrible experience you will notice that the `hiro` is a hardcoded input/ouput command and from the strings input you will notice a interesting string ```>@f2av5il02puano7naaf6adaf3a``` after some test the flag is : **f2av5il02puano7naaf6adaf3a**

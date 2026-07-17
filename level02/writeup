@@ -1,0 +1,12 @@
+```sh
+level02@snowcrash:~$ cat README
+A Kourier never loses a package. Even after delivery.
+level02@snowcrash:~$ find / -user flag02 2>/dev/null | grep -v '/proc'
+/sys/fs/cgroup/system.slice/kourier.service/memory.pressure
+/tmp/kourier_delivery.tmp
+/home/flag02
+level02@snowcrash:~$ cat /tmp/kourier_delivery.tmp 
+qi0mauch9ahksha8b6dfe3p0kq
+level02@snowcrash:~$ 
+```
+our flag is : **qi0mauch9ahksha8b6dfe3p0kq**

