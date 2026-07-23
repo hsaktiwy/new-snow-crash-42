@@ -52,7 +52,7 @@ typedef union {
     struct {
         uint8_t  version : 3;
         uint8_t  state   : 2;
-        uint8_t  cmd     : 3; []
+        uint8_t  cmd     : 3;
         uint32_t length;          /* payload length, little-endian  */
         uint16_t checksum;        /* simple XOR-16 over payload      */
     } __attribute__((packed)) fields;
